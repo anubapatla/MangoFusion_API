@@ -4,6 +4,7 @@ using MangoFusion_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MangoFusion_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260525203834_addMenuItemToDb")]
+    partial class addMenuItemToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,88 +128,6 @@ namespace MangoFusion_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MenuItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Category = "Main Course",
-                            Description = "Delicious cheese pizza with tomato sauce and fresh basil.",
-                            Image = "https://example.com/images/pizza.jpg",
-                            Name = "Pizza",
-                            Price = 9.9900000000000002,
-                            SpecialTag = "Vegetarian"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Category = "Appetizer",
-                            Description = "Crisp romaine lettuce with Caesar dressing, croutons, and Parmesan cheese.",
-                            Image = "https://example.com/images/caesar_salad.jpg",
-                            Name = "Caesar Salad",
-                            Price = 6.9900000000000002,
-                            SpecialTag = "Gluten-Free"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = "Dessert",
-                            Description = "Warm chocolate cake with a gooey molten center, served with vanilla ice cream.",
-                            Image = "https://example.com/images/lava_cake.jpg",
-                            Name = "Chocolate Lava Cake",
-                            Price = 5.9900000000000002,
-                            SpecialTag = "Vegetarian"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Category = "Main Course",
-                            Description = "Fresh salmon fillet grilled to perfection, served with lemon butter sauce.",
-                            Image = "https://example.com/images/grilled_salmon.jpg",
-                            Name = "Grilled Salmon",
-                            Price = 14.99,
-                            SpecialTag = "Gluten-Free"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Category = "Beverage",
-                            Description = "Refreshing mango smoothie made with fresh mangoes and yogurt.",
-                            Image = "https://example.com/images/mango_smoothie.jpg",
-                            Name = "Mango Smoothie",
-                            Price = 4.9900000000000002,
-                            SpecialTag = "Vegan"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Category = "Main Course",
-                            Description = "Classic Italian pasta dish with creamy sauce, pancetta, and Parmesan cheese.",
-                            Image = "https://example.com/images/spaghetti_carbonara.jpg",
-                            Name = "Spaghetti Carbonara",
-                            Price = 11.99,
-                            SpecialTag = "Contains Pork"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Category = "Appetizer",
-                            Description = "Fresh mozzarella, ripe tomatoes, and basil drizzled with balsamic glaze.",
-                            Image = "https://example.com/images/caprese_salad.jpg",
-                            Name = "Caprese Salad",
-                            Price = 7.9900000000000002,
-                            SpecialTag = "Vegetarian"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Category = "Dessert",
-                            Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream.",
-                            Image = "https://example.com/images/tiramisu.jpg",
-                            Name = "Tiramisu",
-                            Price = 6.9900000000000002,
-                            SpecialTag = "Vegetarian"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
