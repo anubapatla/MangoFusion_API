@@ -23,5 +23,19 @@ namespace MangoFusion_API.Controllers
             _response.StatusCode= HttpStatusCode.OK;
             return Ok(_response);
         }
+        [HttpGet("{id:int}",Name="GetMenuItem")]
+        public IActionResult GetMenuItems(int id)
+        {
+            if(id==0)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                return BadRequest(_response);
+            }
+            MenuItem? menuItem = _db.MenuItems.FirstOrDefault(u => u.Id == id);
+            _response.Result = menuItem;
+            _response.StatusCode = HttpStatusCode.OK;
+            return Ok(_response);
+        }
     }
 }
