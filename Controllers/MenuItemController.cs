@@ -41,7 +41,8 @@ namespace MangoFusion_API.Controllers
             return Ok(_response);
         }
         [HttpPost]
-        public async Task<ActionResult<ApiResponse>>CreateMenuItem([FromForm] MenuItemCreateDTO menuItemCreateDTO)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResponse>> CreateMenuItem([FromForm] MenuItemCreateDTO menuItemCreateDTO)
         {
             try
             {
@@ -51,25 +52,25 @@ namespace MangoFusion_API.Controllers
                     {
                         _response.IsSuccess = false;
                         _response.StatusCode = HttpStatusCode.BadRequest;
-                        _response.ErrorMessage = [ "file is required." ];
+                        _response.ErrorMessage = ["file is required."];
                         return BadRequest(_response);
                     }
                     var imagesPath = Path.Combine(_env.WebRootPath, "images");
-                    if(!Directory.Exists(imagesPath))
+                    if (!Directory.Exists(imagesPath))
                     {
                         Directory.CreateDirectory(imagesPath);
                     }
                     var filePath = Path.Combine(imagesPath, menuItemCreateDTO.File.FileName);
-                    if(System.IO.File.Exists(filePath))
+                    if (System.IO.File.Exists(filePath))
                     {
-                      System.IO.File.Delete(filePath);
+                        System.IO.File.Delete(filePath);
                     }
                     //uploading the images
-                    using(var stream = new FileStream(filePath, FileMode.Create))
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await menuItemCreateDTO.File.CopyToAsync(stream);
                     }
-                    MenuItem menuItem = new MenuItem()
+                    MenuItem menuItem = new ()
                     {
                         Name = menuItemCreateDTO.Name,
                         Description = menuItemCreateDTO.Description,
@@ -80,6 +81,9 @@ namespace MangoFusion_API.Controllers
                     };
                     _db.MenuItems.Add(menuItem);
                     await _db.SaveChangesAsync();
+                    _response.Result = menuItem;
+                    _response.StatusCode = HttpStatusCode.Created;
+                    return CreatedAtRoute("GetMenuItem", new { id = menuItem.Id }, _response);
                 }
                 else
                 {
@@ -89,8 +93,10 @@ namespace MangoFusion_API.Controllers
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.ErrorMessage = [ ex.ToString() ];
+                _response.ErrorMessage = [ex.ToString()];
             }
+            return BadRequest(_response);
         }
     }
 }
+
