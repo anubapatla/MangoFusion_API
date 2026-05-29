@@ -172,6 +172,56 @@ namespace MangoFusion_API.Controllers
             }
             return BadRequest(_response);
         }
+
+        [HttpDelete]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ApiResponse>> DeleteMenuItem(int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (id == 0)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        // _response.ErrorMessage = ["file is required."];
+                        return BadRequest(_response);
+                    }
+                    MenuItem? menuItemFromDb = _db.MenuItems.FirstOrDefault(u => u.Id == id);
+                    if (menuItemFromDb == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        //_response.ErrorMessage = ["MenuItem not found."];
+                        return BadRequest(_response);
+                    }
+                        var imagesPath = Path.Combine(_env.WebRootPath, "images");
+                       
+                        var filePath_OldFile = Path.Combine(_env.WebRootPath, menuItemFromDb.Image);
+                        if (System.IO.File.Exists(filePath_OldFile))
+                        {
+                            System.IO.File.Delete(filePath_OldFile);
+                        }
+
+                        //uploading the image 
+                    _db.MenuItems.Remove(menuItemFromDb);
+                    await _db.SaveChangesAsync();
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = [ex.ToString()];
+            }
+            return BadRequest(_response);
+        }
     }
 }
 
