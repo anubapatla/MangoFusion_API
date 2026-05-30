@@ -25,7 +25,7 @@ namespace MangoFusion_API.Data
                     Category = "Main Course",
                     SpecialTag = "Vegetarian",
                     Price = 9.99,
-                    Image = "https://example.com/images/pizza.jpg"
+                    Image = "images/pizza.jpg"
                 },
                 new MenuItem
                 {
@@ -35,7 +35,7 @@ namespace MangoFusion_API.Data
                     Category = "Appetizer",
                     SpecialTag = "Gluten-Free",
                     Price = 6.99,
-                    Image = "https://example.com/images/caesar_salad.jpg"
+                    Image = "images/pasta.jpg"
                 },
                 new MenuItem
                 {
@@ -45,7 +45,7 @@ namespace MangoFusion_API.Data
                     Category = "Dessert",
                     SpecialTag = "Vegetarian",
                     Price = 5.99,
-                    Image = "https://example.com/images/lava_cake.jpg"
+                    Image = "images/donuts.jpg"
                 },
                 new MenuItem
                 {
@@ -55,7 +55,7 @@ namespace MangoFusion_API.Data
                     Category = "Main Course",
                     SpecialTag = "Gluten-Free",
                     Price = 14.99,
-                    Image = "https://example.com/images/grilled_salmon.jpg"
+                    Image = "iamges/fastfood.jpg"
                 },
                 new MenuItem
                 {
@@ -65,7 +65,7 @@ namespace MangoFusion_API.Data
                     Category = "Beverage",
                     SpecialTag = "Vegan",
                     Price = 4.99,
-                    Image = "https://example.com/images/mango_smoothie.jpg"
+                    Image = "images/smoothie.jpg"
                 },
                 new MenuItem
                 {
@@ -75,7 +75,7 @@ namespace MangoFusion_API.Data
                     Category = "Main Course",
                     SpecialTag = "Contains Pork",
                     Price = 11.99,
-                    Image = "https://example.com/images/spaghetti_carbonara.jpg"
+                    Image = "images/spaghetti.jpg"
                 },
                 new MenuItem
                 {
@@ -85,7 +85,7 @@ namespace MangoFusion_API.Data
                     Category = "Appetizer",
                     SpecialTag = "Vegetarian",
                     Price = 7.99,
-                    Image = "https://example.com/images/caprese_salad.jpg"
+                    Image = "images/chichen.jpg"
                 },
                 new MenuItem
                 {
@@ -95,7 +95,7 @@ namespace MangoFusion_API.Data
                     Category = "Dessert",
                     SpecialTag = "Vegetarian",
                     Price = 6.99,
-                    Image = "https://example.com/images/tiramisu.jpg"
+                    Image = "images/burger.jpg"
                 }
 
             );
