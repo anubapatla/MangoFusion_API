@@ -48,6 +48,8 @@ builder.Services.AddAuthentication(u =>
 builder.Services.AddOpenApi(
     options=> { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
+builder.Services.AddTransient<ApiResponse>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
