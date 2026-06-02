@@ -3,7 +3,10 @@ using MangoFusion_API.Models.Dto;
 using MangoFusion_API.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 
 namespace MangoFusion_API.Controllers
 {
@@ -84,6 +87,74 @@ namespace MangoFusion_API.Controllers
                 return BadRequest(_response);
             }
             
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userFromDb = await _userManager.FindByEmailAsync(model.Email);
+                if (userFromDb != null)
+                {
+                    bool isValid = await _userManager.CheckPasswordAsync(userFromDb, model.Password);
+                    if (!isValid)
+                    {
+                        _response.Result= new LoginResponseDTO();
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.IsSuccess = false;
+                        _response.ErrorMessage.Add("Invalid Password");
+                        return BadRequest(_response);
+                    }
+                    JwtSecurityTokenHandler tokenHandler = new();
+                    byte[] key = System.Text.Encoding.UTF8.GetBytes(secretKey);
+
+                    SecurityTokenDescriptor tokenDescriptor = new()
+                    {
+                        Subject = new ClaimsIdentity(
+                            [
+                            new("fullname", userFromDb.Name),
+                            new("id", userFromDb.Id),
+                            new (ClaimTypes.Email, userFromDb.Email!.ToString()),
+                            new (ClaimTypes.Role,  _userManager.GetRolesAsync(userFromDb).Result.FirstOrDefault()!)
+                            ]),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                    LoginResponseDTO loginResponseDTO = new()
+                    {
+                        Email = userFromDb.Email,
+                        Token = tokenHandler.WriteToken(token),
+                        Role = _userManager.GetRolesAsync(userFromDb).Result.FirstOrDefault()!
+                    };
+                    _response.Result = loginResponseDTO;
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.IsSuccess = true;
+                    return Ok(_response);
+                }
+                _response.Result = new LoginResponseDTO();
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessage.Add("Invalid Password");
+                return BadRequest(_response);
+
+
+            }
+            else
+            {
+
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        _response.ErrorMessage.Add(error.ErrorMessage);
+                    }
+                }
+                return BadRequest(_response);
+            }
+
         }
     }
 }
