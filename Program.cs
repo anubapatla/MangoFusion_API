@@ -42,6 +42,41 @@ builder.Services.AddAuthentication(u =>
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(key)),
         ClockSkew = TimeSpan.Zero
     };
+u.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+{
+    OnMessageReceived = ctx =>
+    {
+        // fired when the middleware reads the token from the request
+        var token = ctx.Request.Headers["Authorization"].FirstOrDefault();
+        // optional: write to logger
+        ctx.HttpContext.RequestServices.GetService<ILoggerFactory>()?
+            .CreateLogger("JwtDebug")?.LogDebug("OnMessageReceived authorization: {auth}", token);
+        return Task.CompletedTask;
+    },
+    OnAuthenticationFailed = ctx =>
+    {
+        ctx.HttpContext.RequestServices.GetService<ILoggerFactory>()?
+            .CreateLogger("JwtDebug")?.LogError(ctx.Exception, "Authentication failed");
+        // include exception message in response when debugging only
+        // ctx.Response.Headers.Add("X-Auth-Error", ctx.Exception.Message);
+        return Task.CompletedTask;
+    },
+    OnTokenValidated = ctx =>
+    {
+        ctx.HttpContext.RequestServices.GetService<ILoggerFactory>()?
+            .CreateLogger("JwtDebug")?.LogDebug("Token validated for {sub}", ctx.Principal?.Identity?.Name);
+        return Task.CompletedTask;
+    },
+    OnChallenge = ctx =>
+    {
+        ctx.HttpContext.RequestServices.GetService<ILoggerFactory>()?
+            .CreateLogger("JwtDebug")?.LogWarning("OnChallenge: {error} {errorDesc}", ctx.Error, ctx.ErrorDescription);
+        return Task.CompletedTask;
+    }
+};
+
+
+
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

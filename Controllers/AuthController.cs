@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 
 namespace MangoFusion_API.Controllers
 {
@@ -94,19 +95,21 @@ namespace MangoFusion_API.Controllers
             if (ModelState.IsValid)
             {
                 var userFromDb = await _userManager.FindByEmailAsync(model.Email);
+                Console.WriteLine(userFromDb?.Email);
                 if (userFromDb != null)
                 {
                     bool isValid = await _userManager.CheckPasswordAsync(userFromDb, model.Password);
                     if (!isValid)
                     {
-                        _response.Result= new LoginResponseDTO();
+                        _response.Result = new LoginResponseDTO();
                         _response.StatusCode = HttpStatusCode.BadRequest;
                         _response.IsSuccess = false;
                         _response.ErrorMessage.Add("Invalid Password");
                         return BadRequest(_response);
                     }
+                
                     JwtSecurityTokenHandler tokenHandler = new();
-                    byte[] key = System.Text.Encoding.UTF8.GetBytes(secretKey);
+                    byte[] key = Encoding.ASCII.GetBytes(secretKey);
 
                     SecurityTokenDescriptor tokenDescriptor = new()
                     {
@@ -121,13 +124,13 @@ namespace MangoFusion_API.Controllers
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                     };
                     SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-                    LoginResponseDTO loginResponseDTO = new()
+                    LoginResponseDTO loginResponse = new()
                     {
                         Email = userFromDb.Email,
                         Token = tokenHandler.WriteToken(token),
                         Role = _userManager.GetRolesAsync(userFromDb).Result.FirstOrDefault()!
                     };
-                    _response.Result = loginResponseDTO;
+                    _response.Result = loginResponse;
                     _response.StatusCode = HttpStatusCode.OK;
                     _response.IsSuccess = true;
                     return Ok(_response);
@@ -155,6 +158,11 @@ namespace MangoFusion_API.Controllers
                 return BadRequest(_response);
             }
 
+        }
+        [HttpGet("AuthTest")]
+        public IActionResult AuthTest()
+        {
+            return Ok(new { message = "Authorization successful" });
         }
     }
 }
