@@ -18,7 +18,7 @@ namespace MangoFusion_API.Controllers
         [Authorize(Roles =SD.Role_Admin)]
         public ActionResult<string> GetSomething( int someValue)
         {
-            return "You are authorized to see this message with role of admin";
+            return "You are autorized user,with Role of Admin";
         }
     }
 }
