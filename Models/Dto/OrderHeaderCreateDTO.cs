@@ -18,7 +18,7 @@ namespace MangoFusion_API.Models.Dto
         public string Status { get; set; } = string.Empty;
         public int TotalItem { get; set; }
 
-        public List<OrderDetailsCreateDTO> OrderDetailsDTO { get; set; } = new List<OrderDetail>();
+        public List<OrderDetailsCreateDTO> OrderDetailsDTO { get; set; } = new();
 
 
     }

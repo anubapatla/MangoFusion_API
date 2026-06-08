@@ -8,6 +8,9 @@ using System.Net;
 
 namespace MangoFusion_API.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
+
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -77,7 +80,7 @@ namespace MangoFusion_API.Controllers
                 };
                     _db.OrderHeaders.Add(orderHeader);
                     _db.SaveChanges();
-                    foreach (var orderDetailDto in orderHeaderDTO   .OrderDetails)
+                    foreach (var orderDetailDto in orderHeaderDTO.OrderDetailsDTO)
                     {
                         OrderDetail orderDetail = new()
                         {
