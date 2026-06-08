@@ -116,5 +116,79 @@ namespace MangoFusion_API.Controllers
                 return BadRequest(_response);
             }
         }
+        [HttpPut("{orderId}")]
+        public ActionResult<ApiResponse> UpdateOrder(int orderId,[FromBody] OrderHeaderUpdateDTO orderHeaderDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    OrderHeader? orderHeaderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.OrderHeaderId == orderId);
+                    if (orderHeaderFromDb == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.ErrorMessage.Add("order not found");
+                        return NotFound(_response);
+                    }
+                    if(!string.IsNullOrEmpty(orderHeaderDTO.PickUpName))
+                    {
+                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpName;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpPhoneNumber))
+                    {
+                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpPhoneNumber;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpEmail))
+                    {
+                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpEmail;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.Status))
+                    {
+                        if(orderHeaderFromDb.Status.Equals(SD.status_confirmed,StringComparison.InvariantCultureIgnoreCase)
+                            && orderHeaderDTO.Status.Equals(SD.status_readyForPickup, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            orderHeaderFromDb.Status = SD.status_readyForPickup;
+                        }
+                        if (orderHeaderFromDb.Status.Equals(SD.status_readyForPickup, StringComparison.InvariantCultureIgnoreCase)
+                            && orderHeaderDTO.Status.Equals(SD.status_completed, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            orderHeaderFromDb.Status = SD.status_completed;
+                        }
+                       
+                        if( orderHeaderDTO.Status.Equals(SD.status_Cancelled, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            orderHeaderFromDb.Status = SD.status_Cancelled;
+                        }
+                        else
+                        {
+                            _response.IsSuccess = false;
+                            _response.StatusCode = HttpStatusCode.BadRequest;
+                            _response.ErrorMessage.Add("Invalid status update");
+                            return BadRequest(_response);
+                        }
+
+                    }
+                    _db.SaveChanges();
+                    _response.StatusCode = HttpStatusCode.Created;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessage = ModelState.Values.SelectMany(u => u.Errors).
+                        Select(u => u.ErrorMessage).ToList();
+                    return BadRequest(_response);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessage.Add(ex.Message);
+                return BadRequest(_response);
+            }
+        }
     }
 }
