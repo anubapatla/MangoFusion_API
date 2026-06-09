@@ -123,6 +123,13 @@ namespace MangoFusion_API.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if(orderId != orderHeaderDTO.OrderHeaderId)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.ErrorMessage.Add("order id mismatch");
+                        return BadRequest(_response);
+                    }
                     OrderHeader? orderHeaderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.OrderHeaderId == orderId);
                     if (orderHeaderFromDb == null)
                     {
@@ -137,11 +144,11 @@ namespace MangoFusion_API.Controllers
                     }
                     if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpPhoneNumber))
                     {
-                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpPhoneNumber;
+                        orderHeaderFromDb.PickUpPhoneNumber = orderHeaderDTO.PickUpPhoneNumber;
                     }
                     if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpEmail))
                     {
-                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpEmail;
+                        orderHeaderFromDb.PickUpEmail = orderHeaderDTO.PickUpEmail;
                     }
                     if (!string.IsNullOrEmpty(orderHeaderDTO.Status))
                     {
