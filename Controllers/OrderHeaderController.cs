@@ -11,14 +11,14 @@ namespace MangoFusion_API.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    public class OrderController : Controller
+    public class OrderHeaderController : Controller
     {
         private readonly ApplicationDbContext _db;
         private readonly ApiResponse _response;
-        public OrderController(ApplicationDbContext db, ApiResponse response)
+        public OrderHeaderController(ApplicationDbContext db, ApiResponse response)
         {
             _db = db;
-            _response = response;
+            _response = new ApiResponse();
         }
         [HttpGet]
         public ActionResult<ApiResponse> GetOrders( string userId="")
