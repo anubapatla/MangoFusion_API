@@ -22,7 +22,15 @@ namespace MangoFusion_API.Controllers
         [HttpGet]
         public IActionResult GetMenuItems()
         {
-            _response.Result = _db.MenuItems.ToList();
+            List<MenuItem> menuItems = _db.MenuItems.ToList();
+            List<OrderDetail> orderDetailswithRatings = _db.OrderDetails.Where(u => u.Rating != null).ToList();
+            foreach (var menuItem in menuItems)
+            {
+                var rating=orderDetailswithRatings.Where(u=>u.MenuItemId==menuItem.Id).Select(u=>u.Rating.Value);
+                double avgRating = rating.Any()? rating.Average() : 0;
+                menuItem.Ratings = avgRating;
+            }
+            _response.Result= menuItems;
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }
