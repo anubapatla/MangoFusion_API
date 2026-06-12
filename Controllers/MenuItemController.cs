@@ -44,7 +44,13 @@ namespace MangoFusion_API.Controllers
                 return BadRequest(_response);
             }
             MenuItem? menuItem = _db.MenuItems.FirstOrDefault(u => u.Id == id);
-            _response.Result = menuItem;
+            List<OrderDetail> orderDetailswithRatings = _db.OrderDetails.Where(u => u.Rating != null && u.MenuItemId==menuItem.Id).ToList();
+           
+                var rating = orderDetailswithRatings.Select(u => u.Rating.Value);
+                double avgRating = rating.Any() ? rating.Average() : 0;
+                menuItem.Ratings = avgRating;
+            
+             _response.Result = menuItem;
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }
