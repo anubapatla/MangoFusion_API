@@ -1,11 +1,13 @@
+import {ROUTES} from '../../utility/constants';
+import{NavLink} from 'react-router-dom';
 function Header(){
     return(
-        <nav className="navbar-expand-lg border-bottom shadow-sm">
+        <nav className="navbar navbar-expand-lg border-bottom shadow-sm">
             <div className="container py-2">
-                <a href="/" className="navbar-brand d-flex align-items-center gap-2">
+                <NavLink to={ROUTES.HOME} className="navbar-brand d-flex align-items-center gap-2">
                 <i className="bi bi-fire text-primary fs-4"></i>
                 <span className="fw-bold">MangoFusion</span>
-                </a>
+                </NavLink>
                 <button className="navbar-toggler" type="button" 
                 data-bs-toggle="collapse" data-bs-target="#mainNav"
                  aria-controls="mainNav" aria-expanded="false" 
@@ -15,22 +17,22 @@ function Header(){
                 <div className="collapse navbar-collapse" id="mainNav">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0 ">
                         <li className="nav-item">
-                            <a href="#" className="nav-link">My orders</a>
+                            <NavLink to={ROUTES.ORDER_MANAGEMENT} className="nav-link">My orders</NavLink>
                         </li>
                     </ul>
                     <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-1">
                        {/*  theme toggle visible for all users*/ }
                        <li className="nav-item me-lg-2">
-                        <a href="#" className={`nav-link position-relative d-flex align-items-center justify-content-center bg-primary-subtle rounded-circle`}
+                        <NavLink to={ROUTES.CART} className={`nav-link position-relative d-flex align-items-center justify-content-center bg-primary-subtle rounded-circle`}
                         style={{width:"44px", height:"44px"}}> 
                         <i className="bi bi-cart fs-4"></i>
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white start-110"
                             style={{fontSize:"0.7rem"}}>
                             10
                          </span>
-                            </a></li>
+                            </NavLink></li>
                             <li className="nav-item dropdown">
-                                <button className="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                                <button className="nav-link dropdown-toggle btn btn-link d-flex align-items-center gap-2"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <i className="bi bi-person-circle fs-5 text-primary"></i>
                                 <span className="text-truncate"
@@ -46,18 +48,18 @@ function Header(){
                                     "--bs-dropdown-link-hover-bg":"yellow",
                                 }}> 
                                 <li>
-                                    <a href="#" 
+                                    <NavLink to={ROUTES.ORDER_MANAGEMENT} 
                                     className="dropdown-item d-flex align-items-center rounded-3 p-2 small">
                                   <li className="bi bi-speedometer fs-5 text-primary"></li>
                                   <span>Order management</span>
-                                  </a>
+                                  </NavLink>
                                   </li>
                                   <li>
-                                    <a href="#"
+                                    <NavLink to={ROUTES.MENU_MANAGEMENT}
                                     className="dropdown-item d-flex align-items-center gap-2 rounded-2">
                                   <li className="bi bi-person fs-5 text-primary"></li>
                                   <span>menu management</span> 
-                                  </a></li>
+                                  </NavLink></li>
                                   <li>
                                     <hr className="dropdown-divider my-2"></hr>
                                     </li>
@@ -70,8 +72,11 @@ function Header(){
                                     </ul>
                                     </li> 
                                     <li className="nav-item "> 
-                                        <a href="#" className="nav-link">Register</a> 
-                                        </li>
+                                        <NavLink to={ROUTES.REGISTER} className="nav-link">Register</NavLink> 
+                                         </li>
+                                         <li className="nav-item "> 
+                                         <NavLink to={ROUTES.LOGIN} className="nav-link">Login</NavLink> 
+                                         </li>
                                         </ul>   
                 </div>
             </div>
