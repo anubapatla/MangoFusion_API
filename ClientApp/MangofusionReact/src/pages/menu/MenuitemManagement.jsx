@@ -1,4 +1,36 @@
+import MenuItemTable from "../../components/menuitems/MenuItemTable";
 function MenuitemManagement(){
-    return<>Menu Item Management</>
+    return(
+    <div className="container-fluid p-4 mx-3">
+       <div className="row mb-4">
+        <div className="col">
+            <div className="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2>
+                        Menu Item management
+                    </h2>
+                    <p className="text-muted mb-0">
+                        Manage your menu items here </p>
+                </div>
+                <button className="btn btn-primary">
+                    <i className="bi bi-plus-lg me-2"></i>
+                    Add Menu Item
+                </button>
+            </div>
+        </div>
+       </div>
+       <div className="row">
+        <div className="col">
+            <div className="card">
+                <div className="card-body">
+                    <MenuItemTable/>
+                </div>
+            </div>
+        </div>
+                    </div>
+                    
+      menu item for Modal(Add/Edit)
+    </div>
+    );
 }
 export default MenuitemManagement;

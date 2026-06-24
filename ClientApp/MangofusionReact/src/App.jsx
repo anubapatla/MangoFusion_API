@@ -2,6 +2,7 @@ import Headers from './components/layout/Header'
 import './App.css'
 import Approutes from './routes/AppRouter'
 import Footer from './components/layout/Footer'
+import MenuitemManagement from './pages/menu/MenuitemManagement'
 
 function App() {
   return (
@@ -9,7 +10,9 @@ function App() {
       <Headers/>
       <main className="flex-grow-1">
       <Approutes/>
+      <MenuitemManagement/>
       </main>
+
       <Footer/>              
       
     </div>
